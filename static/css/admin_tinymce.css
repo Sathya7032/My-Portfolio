@@ -1,0 +1,27 @@
+/* Clean Styling for TinyMCE inside Django Admin */
+.tox-tinymce {
+    border-radius: 6px !important;
+    border: 1.5px solid #d1d5db !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+    margin-top: 6px !important;
+}
+
+.tox .tox-toolbar,
+.tox .tox-toolbar__primary {
+    background-color: #f9fafb !important;
+    border-bottom: 1px solid #e5e7eb !important;
+}
+
+.tox .tox-statusbar {
+    background-color: #f9fafb !important;
+    border-top: 1px solid #e5e7eb !important;
+    font-size: 11px !important;
+}
+
+.field-description .help,
+.field-content .help {
+    display: block;
+    margin-bottom: 6px !important;
+    font-size: 12px;
+    color: #6b7280;
+}

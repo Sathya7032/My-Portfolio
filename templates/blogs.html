@@ -1,0 +1,349 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TECH BLOGS // K SATYANARAYANA CHARY (@SATHYA)</title>
+    <meta name="description" content="Technical engineering articles, architecture breakdowns, mobile app scaling, and game development logs by K Satyanarayana Chary (@sathya).">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Devicon Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brutal: {
+                            black: '#121212',
+                            white: '#FFFFFF',
+                            bg: '#F5F2EB',
+                            bgDark: '#0C0E12',
+                            cardDark: '#141821',
+                            borderDark: '#2D3748',
+                        },
+                        neon: {
+                            yellow: '#E2FF3B',
+                            green: '#00F59B',
+                            cyan: '#00E5FF',
+                            pink: '#FF2A85',
+                            purple: '#9D4EDD',
+                            orange: '#FF6B00',
+                        }
+                    },
+                    boxShadow: {
+                        'brutal': '4px 4px 0px 0px #121212',
+                        'brutal-lg': '8px 8px 0px 0px #121212',
+                        'brutal-xl': '12px 12px 0px 0px #121212',
+                        'brutal-sm': '2px 2px 0px 0px #121212',
+                        'brutal-dark': '4px 4px 0px 0px #E2FF3B',
+                        'brutal-dark-cyan': '4px 4px 0px 0px #00E5FF',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F5F2EB;
+            color: #121212;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-image: radial-gradient(#121212 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .dark body {
+            background-color: #0C0E12;
+            color: #F5F2EB;
+            background-image: radial-gradient(#2D3748 1px, transparent 1px);
+        }
+
+        .brutal-box {
+            border: 3px solid #121212;
+            box-shadow: 5px 5px 0px 0px #121212;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .brutal-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px 0px #121212;
+        }
+
+        .dark .brutal-box {
+            border: 3px solid #F5F2EB;
+            box-shadow: 5px 5px 0px 0px #E2FF3B;
+        }
+
+        .dark .brutal-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px 0px #E2FF3B;
+        }
+
+        .brutal-btn {
+            border: 3px solid #121212;
+            box-shadow: 4px 4px 0px 0px #121212;
+            font-weight: 700;
+            transition: all 0.1s ease-in-out;
+            cursor: pointer;
+        }
+
+        .brutal-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #121212;
+        }
+
+        .brutal-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px 0px #121212;
+        }
+
+        .dark .brutal-btn {
+            border: 3px solid #F5F2EB;
+            box-shadow: 4px 4px 0px 0px #00E5FF;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen selection:bg-neon-yellow selection:text-brutal-black">
+
+    <!-- TOP ANNOUNCEMENT BANNER -->
+    <div class="bg-neon-yellow text-brutal-black border-b-[3px] border-brutal-black font-mono text-xs md:text-sm py-1.5 px-4 font-bold overflow-hidden">
+        <div class="flex items-center justify-between max-w-7xl mx-auto">
+            <div class="flex items-center gap-2">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                <span>PUBLIC ARCHIVE: <span class="bg-black text-white px-1.5 py-0.5 ml-1">{{ total_blogs }} TRANSMISSIONS PUBLISHED</span></span>
+            </div>
+            <div class="hidden md:flex items-center gap-4">
+                <span>// AUTHOR: K SATYANARAYANA CHARY (@SATHYA)</span>
+                <span>// ENGINEERING &bull; ARCHITECTURE &bull; APPS</span>
+                <span id="live-clock" class="bg-black text-neon-yellow px-2 py-0.5 font-bold">UTC --:--:--</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-40 bg-white dark:bg-brutal-cardDark border-b-[3px] border-brutal-black dark:border-neon-yellow transition-colors">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="{% url 'index' %}" class="flex items-center gap-2 group">
+                    <div class="bg-brutal-black text-neon-yellow dark:bg-neon-yellow dark:text-brutal-black px-3 py-1 font-mono font-extrabold text-lg tracking-wider border-2 border-brutal-black group-hover:rotate-2 transition-transform">
+                        &gt;_SATHYA.DEV
+                    </div>
+                </a>
+                <span class="font-mono text-xs font-bold text-gray-500 hidden sm:inline-block">/</span>
+                <span class="bg-neon-cyan text-brutal-black font-mono text-xs font-black px-2 py-0.5 border border-brutal-black">
+                    OFFICIAL_BLOGS
+                </span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="{% url 'index' %}" class="px-3 py-1.5 font-mono text-xs font-bold bg-white dark:bg-gray-800 text-brutal-black dark:text-white brutal-btn flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    <span>PORTFOLIO</span>
+                </a>
+
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" aria-label="Toggle Dark Mode" class="brutal-btn p-2 bg-neon-cyan dark:bg-neon-yellow text-brutal-black flex items-center justify-center">
+                    <span id="theme-icon" class="text-base flex items-center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    </span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+
+        <!-- HEADER / HERO -->
+        <section class="space-y-4">
+            <div class="inline-flex items-center gap-2 bg-neon-yellow text-brutal-black border-2 border-brutal-black px-3 py-1 font-mono font-extrabold text-xs tracking-wider shadow-[3px_3px_0px_#121212]">
+                <span class="w-2 h-2 rounded-full bg-black animate-ping"></span>
+                TECHNICAL WRITINGS & SYSTEM LOGS
+            </div>
+
+            <h1 class="font-display font-extrabold text-4xl sm:text-6xl text-brutal-black dark:text-white tracking-tight leading-tight">
+                ENGINEERING <span class="bg-neon-cyan px-2 text-brutal-black inline-block transform -rotate-1">TRANSMISSIONS</span> & ARCHITECTURE
+            </h1>
+
+            <p class="font-sans text-lg text-gray-700 dark:text-gray-300 max-w-3xl leading-relaxed">
+                Authored by <strong>K Satyanarayana Chary (@sathya)</strong>. Deep dives on Java Spring Boot microservices, React Native app architectures, mobile game design in Unity, AWS cloud deployments, and lessons learned scaling to thousands of production users.
+            </p>
+
+            <!-- SEARCH AND FILTER BAR -->
+            <div class="pt-4">
+                <form method="GET" action="{% url 'blog_list' %}" class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1">
+                        <input type="text" name="q" value="{{ query }}" placeholder="Search articles by title, keywords, tags (e.g. Spring Boot, AWS, Unity)..." class="w-full bg-white dark:bg-brutal-cardDark text-brutal-black dark:text-white p-3.5 pl-10 border-3 border-brutal-black dark:border-neon-yellow font-mono text-xs font-bold focus:outline-none focus:bg-yellow-50 dark:focus:bg-gray-800 transition-colors shadow-[4px_4px_0px_#121212]">
+                        <svg class="w-4 h-4 text-gray-500 absolute left-3.5 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                    {% if current_category and current_category != 'All' %}
+                    <input type="hidden" name="category" value="{{ current_category }}">
+                    {% endif %}
+                    <button type="submit" class="px-6 py-3.5 bg-neon-yellow text-brutal-black font-mono font-extrabold text-xs uppercase brutal-btn flex items-center justify-center gap-2">
+                        <span>SEARCH</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </button>
+                    {% if query %}
+                    <a href="{% url 'blog_list' %}" class="px-4 py-3.5 bg-neon-pink text-white font-mono font-bold text-xs brutal-btn flex items-center justify-center">
+                        CLEAR
+                    </a>
+                    {% endif %}
+                </form>
+
+                <!-- Category Filters -->
+                <div class="mt-4 flex flex-wrap gap-2 font-mono text-xs font-bold">
+                    {% for cat in categories %}
+                    <a href="{% url 'blog_list' %}?category={{ cat }}{% if query %}&q={{ query }}{% endif %}" class="px-3 py-1.5 border-2 border-brutal-black {% if current_category == cat %}bg-neon-yellow text-brutal-black font-black shadow-[3px_3px_0px_#121212]{% else %}bg-white dark:bg-gray-800 text-brutal-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700{% endif %} transition-all">
+                        {{ cat }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOG POSTS GRID -->
+        <section class="space-y-6">
+            {% if blogs %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for blog in blogs %}
+                <article class="bg-white dark:bg-brutal-cardDark brutal-box flex flex-col justify-between overflow-hidden">
+                    <div>
+                        <!-- Card Header -->
+                        <div class="bg-brutal-black text-neon-yellow p-3 flex items-center justify-between border-b-3 border-brutal-black font-mono text-xs font-bold">
+                            <span class="bg-neon-yellow text-brutal-black px-2 py-0.5 uppercase text-[10px] font-black">
+                                {{ blog.category }}
+                            </span>
+                            <span class="text-gray-400 font-mono text-[11px]">
+                                {{ blog.read_time }}
+                            </span>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-6 space-y-3">
+                            <h2 class="font-display font-extrabold text-2xl text-brutal-black dark:text-white hover:text-neon-pink transition-colors leading-tight">
+                                <a href="{% url 'blog_detail' blog.slug %}">{{ blog.title }}</a>
+                            </h2>
+
+                            <div class="font-sans text-sm text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-3">
+                                {{ blog.description|safe }}
+                            </div>
+
+                            <!-- Tags -->
+                            {% if blog.tags %}
+                            <div class="pt-2 flex flex-wrap gap-1.5 font-mono text-[10px] font-bold">
+                                <span class="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-brutal-black dark:text-gray-300 border border-brutal-black">
+                                    {{ blog.tags }}
+                                </span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Card Footer -->
+                    <div class="p-6 pt-0 space-y-3">
+                        <div class="pt-3 border-t-2 border-dashed border-gray-200 dark:border-gray-700 flex items-center justify-between font-mono text-[11px] text-gray-600 dark:text-gray-400 font-bold">
+                            <span>{{ blog.published_at|date:"d M Y" }}</span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-neon-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                <span>{{ blog.views }} VIEWS</span>
+                            </span>
+                        </div>
+
+                        <a href="{% url 'blog_detail' blog.slug %}" class="w-full py-2.5 bg-neon-yellow text-brutal-black font-mono font-extrabold text-xs uppercase brutal-btn flex items-center justify-center gap-2">
+                            <span>READ ARTICLE</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- Empty State -->
+            <div class="bg-white dark:bg-brutal-cardDark p-10 brutal-box text-center space-y-4">
+                <div class="w-12 h-12 bg-neon-pink text-white mx-auto border-2 border-brutal-black flex items-center justify-center font-mono font-black text-xl">
+                    !
+                </div>
+                <h3 class="font-display font-bold text-2xl text-brutal-black dark:text-white">No articles matching query: "{{ query }}"</h3>
+                <p class="font-sans text-sm text-gray-600 dark:text-gray-400">Try searching for other keywords like "Spring Boot", "AWS", "Unity", or reset the category filter.</p>
+                <a href="{% url 'blog_list' %}" class="inline-block px-5 py-2.5 bg-neon-yellow text-brutal-black font-mono font-extrabold text-xs brutal-btn">
+                    VIEW ALL ARTICLES
+                </a>
+            </div>
+            {% endif %}
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-20 border-t-[3px] border-brutal-black dark:border-neon-yellow bg-white dark:bg-brutal-cardDark transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="font-mono text-xs font-bold text-gray-700 dark:text-gray-300">
+                &copy; 2026 K SATYANARAYANA CHARY (@SATHYA). ALL TECHNICAL ARTICLES PROTECTED.
+            </div>
+            <div class="flex items-center gap-3 font-mono text-xs font-bold">
+                <a href="{% url 'index' %}" class="hover:text-neon-pink">PORTFOLIO HOME</a>
+                <span>&bull;</span>
+                <a href="mailto:sathichary581@gmail.com" class="hover:text-neon-cyan">SATHICHARY581@GMAIL.COM</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const htmlElement = document.documentElement;
+
+        const sunSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`;
+        const moonSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
+
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+            themeIcon.innerHTML = sunSvg;
+        } else {
+            htmlElement.classList.remove('dark');
+            themeIcon.innerHTML = moonSvg;
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                themeIcon.innerHTML = moonSvg;
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.innerHTML = sunSvg;
+            }
+        });
+
+        // UTC Clock
+        function updateClock() {
+            const clockEl = document.getElementById('live-clock');
+            if (clockEl) {
+                const now = new Date();
+                clockEl.textContent = 'UTC ' + now.toUTCString().slice(17, 25);
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+
+</html>

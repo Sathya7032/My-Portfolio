@@ -1,0 +1,400 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ blog.title }} // K SATYANARAYANA CHARY</title>
+    <meta name="description" content="{{ blog.description }}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Devicon Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brutal: {
+                            black: '#121212',
+                            white: '#FFFFFF',
+                            bg: '#F5F2EB',
+                            bgDark: '#0C0E12',
+                            cardDark: '#141821',
+                            borderDark: '#2D3748',
+                        },
+                        neon: {
+                            yellow: '#E2FF3B',
+                            green: '#00F59B',
+                            cyan: '#00E5FF',
+                            pink: '#FF2A85',
+                            purple: '#9D4EDD',
+                            orange: '#FF6B00',
+                        }
+                    },
+                    boxShadow: {
+                        'brutal': '4px 4px 0px 0px #121212',
+                        'brutal-lg': '8px 8px 0px 0px #121212',
+                        'brutal-xl': '12px 12px 0px 0px #121212',
+                        'brutal-sm': '2px 2px 0px 0px #121212',
+                        'brutal-dark': '4px 4px 0px 0px #E2FF3B',
+                        'brutal-dark-cyan': '4px 4px 0px 0px #00E5FF',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F5F2EB;
+            color: #121212;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-image: radial-gradient(#121212 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .dark body {
+            background-color: #0C0E12;
+            color: #F5F2EB;
+            background-image: radial-gradient(#2D3748 1px, transparent 1px);
+        }
+
+        .brutal-box {
+            border: 3px solid #121212;
+            box-shadow: 5px 5px 0px 0px #121212;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .dark .brutal-box {
+            border: 3px solid #F5F2EB;
+            box-shadow: 5px 5px 0px 0px #E2FF3B;
+        }
+
+        .brutal-btn {
+            border: 3px solid #121212;
+            box-shadow: 4px 4px 0px 0px #121212;
+            font-weight: 700;
+            transition: all 0.1s ease-in-out;
+            cursor: pointer;
+        }
+
+        .brutal-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #121212;
+        }
+
+        .brutal-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px 0px #121212;
+        }
+
+        .dark .brutal-btn {
+            border: 3px solid #F5F2EB;
+            box-shadow: 4px 4px 0px 0px #00E5FF;
+        }
+
+        /* Rich Article Styling */
+        .article-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: inherit;
+            border-bottom: 2px solid #121212;
+            padding-bottom: 0.35rem;
+        }
+        .dark .article-content h2 {
+            border-bottom-color: #E2FF3B;
+        }
+
+        .article-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content p {
+            line-height: 1.8;
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.8;
+        }
+
+        .article-content ul {
+            list-style-type: square;
+        }
+
+        .article-content code {
+            font-family: 'JetBrains Mono', monospace;
+            background: #E2FF3B;
+            color: #121212;
+            padding: 0.15rem 0.4rem;
+            font-size: 0.9em;
+            font-weight: 700;
+            border: 1px solid #121212;
+        }
+        .dark .article-content code {
+            background: #2D3748;
+            color: #00E5FF;
+            border-color: #00E5FF;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen selection:bg-neon-yellow selection:text-brutal-black">
+
+    <!-- FLOATING TOAST -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-neon-yellow text-brutal-black px-5 py-3 font-mono font-bold text-sm brutal-box flex items-center gap-3">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <span id="toast-message">Link copied to clipboard!</span>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-40 bg-white dark:bg-brutal-cardDark border-b-[3px] border-brutal-black dark:border-neon-yellow transition-colors">
+        <nav class="max-w-5xl mx-auto px-4 sm:px-6 h-18 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="{% url 'index' %}" class="flex items-center gap-2 group">
+                    <div class="bg-brutal-black text-neon-yellow dark:bg-neon-yellow dark:text-brutal-black px-3 py-1 font-mono font-extrabold text-base tracking-wider border-2 border-brutal-black group-hover:rotate-2 transition-transform">
+                        &gt;_SATHYA.DEV
+                    </div>
+                </a>
+                <span class="text-gray-400 font-mono text-sm hidden sm:inline-block">/</span>
+                <a href="{% url 'blog_list' %}" class="font-mono text-xs font-bold text-gray-700 dark:text-gray-300 hover:text-neon-pink hidden sm:inline-block">
+                    BLOGS
+                </a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="{% url 'blog_list' %}" class="px-3 py-1.5 font-mono text-xs font-bold bg-white dark:bg-gray-800 text-brutal-black dark:text-white brutal-btn flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    <span>ALL ARTICLES</span>
+                </a>
+
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" aria-label="Toggle Dark Mode" class="brutal-btn p-2 bg-neon-cyan dark:bg-neon-yellow text-brutal-black flex items-center justify-center">
+                    <span id="theme-icon" class="text-base flex items-center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    </span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+
+        <!-- BREADCRUMB -->
+        <nav class="flex items-center gap-2 font-mono text-xs font-bold text-gray-600 dark:text-gray-400">
+            <a href="{% url 'index' %}" class="hover:text-neon-cyan">ROOT</a>
+            <span>/</span>
+            <a href="{% url 'blog_list' %}" class="hover:text-neon-cyan">BLOGS</a>
+            <span>/</span>
+            <span class="text-brutal-black dark:text-neon-yellow truncate max-w-[200px] sm:max-w-none">{{ blog.slug }}</span>
+        </nav>
+
+        <!-- ARTICLE HEADER CARD -->
+        <header class="bg-white dark:bg-brutal-cardDark p-6 sm:p-10 brutal-box space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-brutal-black dark:border-gray-700 pb-4">
+                <span class="bg-neon-yellow text-brutal-black font-mono text-xs font-black px-2.5 py-1 border border-brutal-black uppercase">
+                    {{ blog.category }}
+                </span>
+                <div class="flex items-center gap-4 font-mono text-xs font-bold text-gray-600 dark:text-gray-400">
+                    <span>{{ blog.published_at|date:"F d, Y" }}</span>
+                    <span>&bull;</span>
+                    <span>{{ blog.read_time }}</span>
+                    <span>&bull;</span>
+                    <span class="flex items-center gap-1 text-neon-green">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        <span>{{ blog.views }} READS</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <h1 class="font-display font-extrabold text-3xl sm:text-5xl text-brutal-black dark:text-white leading-[1.1] tracking-tight">
+                {{ blog.title }}
+            </h1>
+
+            <!-- Summary Lead -->
+            <div class="font-sans text-lg sm:text-xl text-gray-700 dark:text-gray-300 font-medium leading-relaxed border-l-4 border-neon-cyan pl-4">
+                {{ blog.description|safe }}
+            </div>
+
+            <!-- Author & Tags Row -->
+            <div class="pt-4 border-t-2 border-dashed border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 border-2 border-brutal-black bg-neon-yellow flex items-center justify-center font-display font-black text-base text-brutal-black">
+                        SC
+                    </div>
+                    <div>
+                        <span class="block font-bold text-gray-500">// AUTHORED BY</span>
+                        <span class="font-extrabold text-brutal-black dark:text-white">{{ blog.author }}</span>
+                    </div>
+                </div>
+
+                <!-- Share button -->
+                <button onclick="copyArticleUrl()" class="px-3 py-2 bg-gray-100 dark:bg-gray-800 text-brutal-black dark:text-white border-2 border-brutal-black font-bold brutal-btn flex items-center gap-1.5 self-start sm:self-center">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    <span>SHARE / COPY LINK</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ARTICLE BODY -->
+        <article class="bg-white dark:bg-brutal-cardDark p-6 sm:p-10 brutal-box font-sans text-gray-800 dark:text-gray-200 article-content">
+            {{ blog.content|safe }}
+        </article>
+
+        <!-- SOURCES & REFERENCES SECTION -->
+        {% if sources_list %}
+        <section class="bg-neon-yellow/20 dark:bg-yellow-950/40 p-6 sm:p-8 brutal-box border-3 border-brutal-black dark:border-neon-yellow space-y-4">
+            <div class="flex items-center gap-2 font-mono text-xs font-black uppercase text-brutal-black dark:text-white">
+                <svg class="w-4 h-4 text-neon-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                <span>VERIFIED SOURCES & CITATIONS</span>
+            </div>
+
+            <p class="font-sans text-xs text-gray-700 dark:text-gray-300">
+                The technical claims, code patterns, and benchmark data referenced in this transmission draw from official documentation and repositories:
+            </p>
+
+            <ul class="space-y-2 font-mono text-xs font-bold">
+                {% for src in sources_list %}
+                <li class="p-2.5 bg-white dark:bg-gray-800 border-2 border-brutal-black flex items-center justify-between gap-2 overflow-hidden">
+                    <span class="truncate text-gray-700 dark:text-gray-300">{{ src }}</span>
+                    <a href="{{ src }}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 bg-neon-yellow text-brutal-black hover:bg-neon-cyan shrink-0 transition-colors flex items-center gap-1">
+                        <span>OPEN</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+
+        <!-- RELATED ARTICLES -->
+        {% if related_blogs %}
+        <section class="space-y-4 pt-6">
+            <div class="flex items-center gap-2 font-mono text-xs font-black uppercase text-brutal-black dark:text-white">
+                <span class="w-2.5 h-2.5 bg-neon-green inline-block"></span>
+                <span>MORE ARTICLES BY K SATYANARAYANA CHARY</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {% for rel in related_blogs %}
+                <div class="bg-white dark:bg-brutal-cardDark p-4 brutal-box flex flex-col justify-between">
+                    <div>
+                        <span class="font-mono text-[10px] font-black uppercase text-neon-pink">{{ rel.category }}</span>
+                        <h4 class="font-display font-bold text-base text-brutal-black dark:text-white mt-1 hover:text-neon-cyan leading-snug">
+                            <a href="{% url 'blog_detail' rel.slug %}">{{ rel.title }}</a>
+                        </h4>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 flex justify-between font-mono text-[10px] text-gray-500">
+                        <span>{{ rel.read_time }}</span>
+                        <a href="{% url 'blog_detail' rel.slug %}" class="font-extrabold text-brutal-black dark:text-neon-yellow hover:underline">READ &rarr;</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- BACK BUTTON -->
+        <div class="pt-4 flex justify-between items-center">
+            <a href="{% url 'blog_list' %}" class="px-5 py-3 bg-neon-yellow text-brutal-black font-mono font-extrabold text-xs uppercase brutal-btn flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                <span>BACK TO ALL BLOGS</span>
+            </a>
+
+            <a href="{% url 'index' %}#contact" class="px-5 py-3 bg-white dark:bg-brutal-cardDark text-brutal-black dark:text-white font-mono font-extrabold text-xs uppercase brutal-btn flex items-center gap-2">
+                <span>CONNECT WITH SATHYA</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-20 border-t-[3px] border-brutal-black dark:border-neon-yellow bg-white dark:bg-brutal-cardDark transition-colors">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs font-bold text-gray-600 dark:text-gray-400">
+            <div>
+                &copy; 2026 K SATYANARAYANA CHARY (@SATHYA).
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="{% url 'index' %}" class="hover:text-neon-pink">HOME</a>
+                <span>&bull;</span>
+                <a href="{% url 'blog_list' %}" class="hover:text-neon-cyan">ALL BLOGS</a>
+                <span>&bull;</span>
+                <a href="mailto:sathichary581@gmail.com" class="hover:text-neon-yellow">CONTACT</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Copy URL
+        function copyArticleUrl() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.remove('translate-y-32', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+                setTimeout(() => {
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                    toast.classList.add('translate-y-32', 'opacity-0');
+                }, 2500);
+            });
+        }
+
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const htmlElement = document.documentElement;
+
+        const sunSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`;
+        const moonSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
+
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+            themeIcon.innerHTML = sunSvg;
+        } else {
+            htmlElement.classList.remove('dark');
+            themeIcon.innerHTML = moonSvg;
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                themeIcon.innerHTML = moonSvg;
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.innerHTML = sunSvg;
+            }
+        });
+    </script>
+</body>
+
+</html>
