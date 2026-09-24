@@ -1,0 +1,147 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}BLOG ARCHIVE // ADMIN CONSOLE{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- HEADER BAR -->
+    <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <div class="flex items-center gap-2 font-mono text-xs font-black text-neon-pink">
+                <span>// CONTENT ENGINE</span>
+            </div>
+            <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-brutal-black dark:text-white tracking-tight">
+                BLOG TRANSMISSIONS
+            </h1>
+            <p class="font-sans text-xs text-gray-600 dark:text-gray-400 mt-1">
+                Publish, edit, and organize technical articles authored by Sathya.
+            </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <a href="{% url 'dashboard_blog_create' %}" class="px-5 py-2.5 bg-neon-green text-brutal-black font-mono font-black text-xs uppercase border-2 border-brutal-black brutal-btn flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                <span>+ NEW ARTICLE</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- FILTER & SEARCH BAR -->
+    <div class="bg-white dark:bg-brutal-cardDark p-4 brutal-box flex flex-col md:flex-row items-center justify-between gap-4">
+        <!-- Status filter buttons -->
+        <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto font-mono text-xs font-bold">
+            <a href="{% url 'dashboard_blogs' %}" class="px-3 py-1.5 border-2 border-brutal-black transition-colors {% if current_status == 'all' and not current_category %}bg-neon-yellow text-brutal-black font-black{% else %}bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                ALL ({{ total_count }})
+            </a>
+            <a href="{% url 'dashboard_blogs' %}?status=published" class="px-3 py-1.5 border-2 border-brutal-black transition-colors {% if current_status == 'published' %}bg-neon-green text-brutal-black font-black{% else %}bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                LIVE ({{ published_count }})
+            </a>
+            <a href="{% url 'dashboard_blogs' %}?status=draft" class="px-3 py-1.5 border-2 border-brutal-black transition-colors {% if current_status == 'draft' %}bg-yellow-400 text-brutal-black font-black{% else %}bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                DRAFTS ({{ draft_count }})
+            </a>
+        </div>
+
+        <!-- Search Form -->
+        <form method="GET" action="{% url 'dashboard_blogs' %}" class="flex items-center gap-2 w-full md:w-auto">
+            {% if current_status != 'all' %}
+            <input type="hidden" name="status" value="{{ current_status }}">
+            {% endif %}
+            <div class="relative w-full md:w-72">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search title, category, tags..." class="w-full px-3 py-1.5 font-mono text-xs border-2 border-brutal-black bg-gray-50 dark:bg-gray-900 text-brutal-black dark:text-white focus:outline-none focus:ring-2 focus:ring-neon-cyan">
+            </div>
+            <button type="submit" class="px-3 py-1.5 bg-neon-cyan text-brutal-black font-mono font-bold text-xs border-2 border-brutal-black brutal-btn shrink-0">
+                FILTER
+            </button>
+            {% if query or current_category %}
+            <a href="{% url 'dashboard_blogs' %}" class="px-2 py-1.5 bg-gray-200 dark:bg-gray-700 font-mono text-xs border border-brutal-black">
+                RESET
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- ARTICLES DATA TABLE -->
+    <div class="bg-white dark:bg-brutal-cardDark brutal-box overflow-hidden">
+        {% if blogs %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-left font-mono text-xs border-collapse">
+                <thead class="bg-gray-100 dark:bg-gray-900 border-b-2 border-brutal-black dark:border-gray-700 text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                    <tr>
+                        <th class="py-3 px-4">Title & Details</th>
+                        <th class="py-3 px-4">Category</th>
+                        <th class="py-3 px-4">Status</th>
+                        <th class="py-3 px-4 text-center">Reads</th>
+                        <th class="py-3 px-4">Published</th>
+                        <th class="py-3 px-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
+                    {% for b in blogs %}
+                    <tr class="hover:bg-gray-50/70 dark:hover:bg-gray-800/40 transition-colors">
+                        <td class="py-4 px-4 max-w-sm">
+                            <a href="{% url 'dashboard_blog_edit' b.id %}" class="font-sans font-bold text-sm text-brutal-black dark:text-white hover:text-neon-pink line-clamp-1">
+                                {{ b.title }}
+                            </a>
+                            <div class="text-[11px] text-gray-500 font-mono mt-0.5 flex items-center gap-2">
+                                <span class="text-gray-400">/{{ b.slug|truncatechars:35 }}</span>
+                                <span>&bull;</span>
+                                <span>{{ b.read_time }}</span>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="px-2.5 py-1 text-[10px] font-black border border-brutal-black uppercase bg-neon-yellow/30 text-brutal-black dark:text-white">
+                                {{ b.category }}
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <a href="{% url 'dashboard_blog_toggle' b.id %}" class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-black border border-brutal-black uppercase {% if b.is_published %}bg-neon-green text-brutal-black{% else %}bg-yellow-400 text-brutal-black{% endif %}" title="Click to toggle publish status">
+                                <span class="w-1.5 h-1.5 rounded-full {% if b.is_published %}bg-black{% else %}bg-gray-700{% endif %}"></span>
+                                {% if b.is_published %}LIVE{% else %}DRAFT{% endif %}
+                            </a>
+                        </td>
+
+                        <td class="py-4 px-4 text-center whitespace-nowrap font-bold text-neon-green">
+                            {{ b.views }}
+                        </td>
+
+                        <td class="py-4 px-4 whitespace-nowrap text-gray-600 dark:text-gray-400 text-[11px]">
+                            {{ b.published_at|date:"M d, Y" }}
+                        </td>
+
+                        <td class="py-4 px-4 text-right space-x-1.5 whitespace-nowrap">
+                            {% if b.is_published %}
+                            <a href="{% url 'blog_detail' b.slug %}" target="_blank" class="px-2.5 py-1.5 bg-neon-cyan text-brutal-black font-bold border border-brutal-black hover:opacity-80 transition-opacity" title="View live article on portfolio">
+                                LIVE &nearr;
+                            </a>
+                            {% endif %}
+
+                            <a href="{% url 'dashboard_blog_edit' b.id %}" class="px-2.5 py-1.5 bg-white dark:bg-gray-800 text-brutal-black dark:text-white font-bold border border-brutal-black hover:bg-neon-yellow hover:text-brutal-black transition-colors">
+                                EDIT
+                            </a>
+
+                            <a href="{% url 'dashboard_blog_delete' b.id %}" onclick="return confirm('Delete article: {{ b.title|escapejs }}? This cannot be undone.');" class="px-2 py-1.5 bg-red-500 text-white font-bold border border-brutal-black hover:bg-red-600 transition-colors" title="Delete Article">
+                                &times;
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="py-16 text-center space-y-3 font-mono">
+            <div class="text-3xl text-gray-400">&empty;</div>
+            <p class="text-sm font-bold text-gray-600 dark:text-gray-400">No blog transmissions found.</p>
+            <p class="text-xs text-gray-500">Try adjusting your search criteria or write a new piece.</p>
+            <a href="{% url 'dashboard_blog_create' %}" class="inline-block mt-2 px-4 py-2 bg-neon-yellow text-brutal-black font-black text-xs border-2 border-brutal-black brutal-btn">
+                COMPOSE NEW ARTICLE
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

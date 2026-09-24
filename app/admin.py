@@ -2,6 +2,10 @@ from django.contrib import admin
 # pyrefly: ignore [missing-import]
 from .models import ContactMessage, Blog
 
+admin.site.site_header = ">_SATHYA.DEV // SYSTEM ADMIN"
+admin.site.site_title = "SATHYA.DEV ADMIN"
+admin.site.index_title = "DATA ENGINE & CONFIGURATION"
+
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):

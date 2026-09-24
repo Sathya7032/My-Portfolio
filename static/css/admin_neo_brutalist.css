@@ -1,0 +1,309 @@
+/* ==========================================================================
+   NEO-BRUTALIST DJANGO ADMIN THEME FOR SATHYA.DEV
+   ========================================================================== */
+
+/* Typography & Reset */
+:root {
+    --brutal-black: #121212;
+    --brutal-white: #FFFFFF;
+    --brutal-bg: #F5F2EB;
+    --neon-yellow: #E2FF3B;
+    --neon-green: #00F59B;
+    --neon-cyan: #00E5FF;
+    --neon-pink: #FF2A85;
+}
+
+body {
+    background-color: var(--brutal-bg) !important;
+    color: var(--brutal-black) !important;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Header & Navigation Bar */
+#header {
+    background: #121212 !important;
+    border-bottom: 3px solid var(--neon-yellow) !important;
+    color: #FFFFFF !important;
+    padding: 12px 24px !important;
+}
+
+#header a:link, 
+#header a:visited {
+    color: #FFFFFF !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+#user-tools {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
+
+#user-tools a {
+    color: var(--neon-cyan) !important;
+    text-decoration: underline !important;
+}
+
+/* Breadcrumbs */
+div.breadcrumbs {
+    background: #FFFFFF !important;
+    border-bottom: 2px solid var(--brutal-black) !important;
+    color: var(--brutal-black) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 10px 24px !important;
+}
+
+div.breadcrumbs a {
+    color: var(--brutal-black) !important;
+    font-weight: 800 !important;
+}
+
+div.breadcrumbs a:hover {
+    color: var(--neon-pink) !important;
+}
+
+/* Main Container & Headings */
+#content {
+    padding: 24px !important;
+}
+
+h1, h2, h3 {
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-weight: 800 !important;
+    color: var(--brutal-black) !important;
+    letter-spacing: -0.02em !important;
+}
+
+/* Dashboard Modules / App Sections */
+.module {
+    background: #FFFFFF !important;
+    border: 3px solid var(--brutal-black) !important;
+    box-shadow: 5px 5px 0px 0px var(--brutal-black) !important;
+    margin-bottom: 24px !important;
+    border-radius: 0px !important;
+}
+
+.module caption, 
+.module h2 {
+    background: var(--brutal-black) !important;
+    color: var(--neon-yellow) !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+    padding: 10px 14px !important;
+    border-bottom: 2px solid var(--brutal-black) !important;
+}
+
+.module caption a, 
+.module h2 a {
+    color: var(--neon-yellow) !important;
+}
+
+.module table {
+    border-collapse: collapse !important;
+}
+
+.module tr th, 
+.module tr td {
+    padding: 10px 14px !important;
+    border-bottom: 1px solid #E5E7EB !important;
+}
+
+.module tr:hover {
+    background-color: rgba(226, 255, 59, 0.15) !important;
+}
+
+/* Buttons & Submits */
+.button, 
+input[type=submit], 
+input[type=button], 
+.submit-row input, 
+a.button {
+    background: var(--neon-yellow) !important;
+    color: var(--brutal-black) !important;
+    border: 2px solid var(--brutal-black) !important;
+    box-shadow: 3px 3px 0px 0px var(--brutal-black) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 800 !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    padding: 8px 16px !important;
+    border-radius: 0px !important;
+    cursor: pointer !important;
+    transition: all 0.1s ease-in-out !important;
+}
+
+.button:hover, 
+input[type=submit]:hover, 
+input[type=button]:hover, 
+.submit-row input:hover {
+    transform: translate(-2px, -2px) !important;
+    box-shadow: 5px 5px 0px 0px var(--brutal-black) !important;
+    background: var(--neon-cyan) !important;
+}
+
+.button.default, 
+input[type=submit].default {
+    background: var(--neon-green) !important;
+    color: var(--brutal-black) !important;
+}
+
+.button[name="_delete"], 
+a.deletelink {
+    background: #EF4444 !important;
+    color: #FFFFFF !important;
+    box-shadow: 3px 3px 0px 0px var(--brutal-black) !important;
+}
+
+/* Changelist Table & Filters */
+#changelist {
+    background: transparent !important;
+}
+
+#changelist table {
+    border: 3px solid var(--brutal-black) !important;
+    box-shadow: 5px 5px 0px 0px var(--brutal-black) !important;
+    background: #FFFFFF !important;
+    border-radius: 0px !important;
+}
+
+#changelist table thead th {
+    background: var(--brutal-black) !important;
+    color: #FFFFFF !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    border-bottom: 2px solid var(--brutal-black) !important;
+    padding: 10px !important;
+}
+
+#changelist table thead th a {
+    color: var(--neon-yellow) !important;
+}
+
+#changelist table tbody tr:nth-child(even) {
+    background-color: #FBF9F5 !important;
+}
+
+#changelist table tbody tr:hover {
+    background-color: rgba(0, 229, 255, 0.15) !important;
+}
+
+#changelist-filter {
+    background: #FFFFFF !important;
+    border: 3px solid var(--brutal-black) !important;
+    box-shadow: 4px 4px 0px 0px var(--brutal-black) !important;
+    border-radius: 0px !important;
+    margin-left: 15px !important;
+}
+
+#changelist-filter h2 {
+    background: var(--brutal-black) !important;
+    color: var(--neon-yellow) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    padding: 10px 12px !important;
+}
+
+#changelist-filter li.selected a {
+    color: var(--neon-pink) !important;
+    font-weight: 800 !important;
+}
+
+/* Object Tools Bar (e.g. "Add Blog") */
+.object-tools li a {
+    background: var(--neon-green) !important;
+    color: var(--brutal-black) !important;
+    border: 2px solid var(--brutal-black) !important;
+    box-shadow: 3px 3px 0px 0px var(--brutal-black) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 800 !important;
+    border-radius: 0px !important;
+    padding: 6px 14px !important;
+}
+
+.object-tools li a:hover {
+    background: var(--neon-yellow) !important;
+    transform: translate(-1px, -1px) !important;
+    box-shadow: 4px 4px 0px 0px var(--brutal-black) !important;
+}
+
+/* Forms & Inputs */
+input[type=text], 
+input[type=password], 
+input[type=email], 
+input[type=url], 
+input[type=number], 
+textarea, 
+select {
+    border: 2px solid var(--brutal-black) !important;
+    border-radius: 0px !important;
+    padding: 8px 12px !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 13px !important;
+    background: #FFFFFF !important;
+    color: var(--brutal-black) !important;
+    box-shadow: 2px 2px 0px 0px var(--brutal-black) !important;
+}
+
+input:focus, 
+textarea:focus, 
+select:focus {
+    outline: 2px solid var(--neon-cyan) !important;
+    box-shadow: 4px 4px 0px 0px var(--brutal-black) !important;
+}
+
+/* Fieldsets */
+fieldset {
+    border: 2px solid var(--brutal-black) !important;
+    background: #FFFFFF !important;
+    padding: 16px 20px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 4px 4px 0px 0px var(--brutal-black) !important;
+}
+
+fieldset h2 {
+    background: var(--brutal-black) !important;
+    color: var(--neon-cyan) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    padding: 8px 14px !important;
+    margin: -16px -20px 16px -20px !important;
+}
+
+/* Messages & Alerts */
+ul.messagelist li {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    border: 2px solid var(--brutal-black) !important;
+    box-shadow: 3px 3px 0px 0px var(--brutal-black) !important;
+    border-radius: 0px !important;
+    margin-bottom: 12px !important;
+}
+
+ul.messagelist li.success {
+    background: var(--neon-green) !important;
+    color: var(--brutal-black) !important;
+}
+
+ul.messagelist li.error {
+    background: #EF4444 !important;
+    color: #FFFFFF !important;
+}
+
+/* Sticky Submit Row */
+.submit-row {
+    background: #FFFFFF !important;
+    border: 2px solid var(--brutal-black) !important;
+    box-shadow: 4px 4px 0px 0px var(--brutal-black) !important;
+    border-radius: 0px !important;
+    padding: 12px 20px !important;
+}

@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN LOGIN // SATHYA.DEV</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brutal: {
+                            black: '#121212',
+                            white: '#FFFFFF',
+                            bg: '#F5F2EB',
+                            bgDark: '#0C0E12',
+                            cardDark: '#141821',
+                        },
+                        neon: {
+                            yellow: '#E2FF3B',
+                            green: '#00F59B',
+                            cyan: '#00E5FF',
+                            pink: '#FF2A85',
+                        }
+                    },
+                    boxShadow: {
+                        'brutal': '5px 5px 0px 0px #121212',
+                        'brutal-lg': '8px 8px 0px 0px #121212',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F5F2EB;
+            color: #121212;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-image: radial-gradient(#121212 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .dark body {
+            background-color: #0C0E12;
+            color: #F5F2EB;
+            background-image: radial-gradient(#2D3748 1px, transparent 1px);
+        }
+
+        .brutal-box {
+            border: 3px solid #121212;
+            box-shadow: 6px 6px 0px 0px #121212;
+        }
+
+        .dark .brutal-box {
+            border: 3px solid #F5F2EB;
+            box-shadow: 6px 6px 0px 0px #E2FF3B;
+        }
+
+        .brutal-btn {
+            border: 3px solid #121212;
+            box-shadow: 4px 4px 0px 0px #121212;
+            font-weight: 800;
+            transition: all 0.1s ease-in-out;
+            cursor: pointer;
+        }
+
+        .brutal-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #121212;
+        }
+
+        .dark .brutal-btn {
+            border: 3px solid #F5F2EB;
+            box-shadow: 4px 4px 0px 0px #00E5FF;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md">
+
+        <!-- BRANDING HEADER -->
+        <div class="text-center mb-6">
+            <a href="{% url 'index' %}" class="inline-block group">
+                <div class="bg-brutal-black text-neon-yellow px-4 py-2 font-mono font-extrabold text-lg border-2 border-brutal-black group-hover:rotate-1 transition-transform inline-block">
+                    &gt;_SATHYA.DEV
+                </div>
+            </a>
+            <div class="font-mono text-xs font-bold text-gray-500 mt-2">
+                // SYSTEM AUTHENTICATION TERMINAL
+            </div>
+        </div>
+
+        <!-- LOGIN CARD -->
+        <div class="bg-white dark:bg-brutal-cardDark p-8 brutal-box space-y-6">
+
+            <div class="border-b-2 border-brutal-black dark:border-gray-700 pb-3">
+                <span class="font-mono text-xs font-black uppercase text-neon-pink">// AUTHORIZATION REQUIRED</span>
+                <h1 class="font-display font-extrabold text-2xl text-brutal-black dark:text-white mt-1">
+                    COMMAND CONSOLE
+                </h1>
+            </div>
+
+            {% if error_msg %}
+            <div class="p-3 bg-red-500 text-white font-mono text-xs font-bold border-2 border-brutal-black">
+                [!] {{ error_msg }}
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'dashboard_login' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}" class="space-y-5">
+                {% csrf_token %}
+
+                <div class="space-y-1.5">
+                    <label for="username" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300">
+                        ADMIN USERNAME
+                    </label>
+                    <input type="text" id="username" name="username" required autofocus placeholder="e.g. admin or sathya" class="w-full px-4 py-2.5 font-mono text-sm bg-gray-50 dark:bg-gray-900 text-brutal-black dark:text-white border-2 border-brutal-black focus:outline-none focus:ring-2 focus:ring-neon-cyan">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label for="password" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300">
+                        ACCESS KEY / PASSWORD
+                    </label>
+                    <input type="password" id="password" name="password" required placeholder="••••••••••••" class="w-full px-4 py-2.5 font-mono text-sm bg-gray-50 dark:bg-gray-900 text-brutal-black dark:text-white border-2 border-brutal-black focus:outline-none focus:ring-2 focus:ring-neon-cyan">
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-neon-yellow text-brutal-black font-mono font-black text-sm uppercase border-2 border-brutal-black brutal-btn hover:bg-neon-green flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+                    <span>VERIFY & ENTER CONSOLE</span>
+                </button>
+            </form>
+
+            <div class="pt-4 border-t border-dashed border-gray-300 dark:border-gray-700 flex justify-between items-center font-mono text-xs text-gray-500">
+                <a href="{% url 'index' %}" class="hover:text-neon-pink">&larr; Return to Portfolio</a>
+                <a href="/admin/" class="hover:text-neon-cyan">Django Admin &rarr;</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</body>
+
+</html>

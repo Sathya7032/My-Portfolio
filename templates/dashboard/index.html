@@ -1,0 +1,221 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}OVERVIEW // ADMIN CONSOLE{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+    <!-- WELCOME HERO BANNER -->
+    <div class="bg-white dark:bg-brutal-cardDark p-6 sm:p-8 brutal-box flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="space-y-2">
+            <div class="flex items-center gap-2 font-mono text-xs font-black text-neon-pink">
+                <span class="w-2.5 h-2.5 bg-neon-green inline-block animate-pulse"></span>
+                <span>AUTHENTICATED AS {{ request.user.username|upper }} // STAFF LEVEL ACCESS</span>
+            </div>
+            <h1 class="font-display font-extrabold text-2xl sm:text-4xl text-brutal-black dark:text-white tracking-tight">
+                PORTFOLIO CONTROL CENTER
+            </h1>
+            <p class="font-sans text-xs sm:text-sm text-gray-600 dark:text-gray-400 max-w-2xl">
+                Manage tech publications, monitor real-time reading traction, respond to incoming visitor transmissions, and control your developer presence.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+            <a href="{% url 'dashboard_blog_create' %}" class="px-5 py-3 bg-neon-yellow text-brutal-black font-mono font-black text-xs uppercase border-2 border-brutal-black brutal-btn flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                <span>COMPOSE ARTICLE</span>
+            </a>
+            <a href="{% url 'dashboard_messages' %}?status=unread" class="px-4 py-3 bg-neon-cyan text-brutal-black font-mono font-extrabold text-xs uppercase border-2 border-brutal-black brutal-btn flex items-center gap-1.5">
+                <span>INBOX ({{ unread_messages }})</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 4 ANALYTICS KPI CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Total Articles -->
+        <div class="bg-white dark:bg-brutal-cardDark p-5 brutal-box space-y-3">
+            <div class="flex items-center justify-between font-mono text-xs font-black text-gray-500">
+                <span>// ARTICLES</span>
+                <span class="p-1 bg-neon-yellow text-brutal-black border border-brutal-black">DOCS</span>
+            </div>
+            <div class="font-display font-black text-4xl sm:text-5xl text-brutal-black dark:text-white">
+                {{ total_blogs }}
+            </div>
+            <div class="flex items-center gap-3 font-mono text-xs font-bold pt-2 border-t border-dashed border-gray-200 dark:border-gray-700">
+                <span class="text-neon-green">{{ published_blogs }} LIVE</span>
+                <span>&bull;</span>
+                <span class="text-gray-500">{{ draft_blogs }} DRAFTS</span>
+            </div>
+        </div>
+
+        <!-- Total Reads -->
+        <div class="bg-white dark:bg-brutal-cardDark p-5 brutal-box space-y-3">
+            <div class="flex items-center justify-between font-mono text-xs font-black text-gray-500">
+                <span>// TOTAL READS</span>
+                <span class="p-1 bg-neon-green text-brutal-black border border-brutal-black">VIEWS</span>
+            </div>
+            <div class="font-display font-black text-4xl sm:text-5xl text-neon-green">
+                {{ total_views }}
+            </div>
+            <div class="font-mono text-xs font-bold text-gray-500 dark:text-gray-400 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700">
+                <span>CUMULATIVE TRACTION</span>
+            </div>
+        </div>
+
+        <!-- Total Inquiries -->
+        <div class="bg-white dark:bg-brutal-cardDark p-5 brutal-box space-y-3">
+            <div class="flex items-center justify-between font-mono text-xs font-black text-gray-500">
+                <span>// INBOX LEADS</span>
+                <span class="p-1 bg-neon-pink text-white border border-brutal-black">INBOX</span>
+            </div>
+            <div class="font-display font-black text-4xl sm:text-5xl text-brutal-black dark:text-white">
+                {{ total_messages }}
+            </div>
+            <div class="flex items-center gap-2 font-mono text-xs font-bold pt-2 border-t border-dashed border-gray-200 dark:border-gray-700">
+                {% if unread_messages > 0 %}
+                <span class="text-neon-pink font-black">{{ unread_messages }} UNREAD</span>
+                {% else %}
+                <span class="text-neon-green">ALL CAUGHT UP</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Categories / Topics -->
+        <div class="bg-white dark:bg-brutal-cardDark p-5 brutal-box space-y-3">
+            <div class="flex items-center justify-between font-mono text-xs font-black text-gray-500">
+                <span>// STATUS</span>
+                <span class="p-1 bg-neon-cyan text-brutal-black border border-brutal-black">SYSTEM</span>
+            </div>
+            <div class="font-display font-black text-2xl sm:text-3xl text-brutal-black dark:text-white uppercase leading-tight pt-1">
+                ONLINE
+            </div>
+            <div class="font-mono text-xs font-bold text-neon-cyan pt-2 border-t border-dashed border-gray-200 dark:border-gray-700">
+                <span>DJANGO 6.1 // SQLITE3</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 2-COLUMN SECTION: RECENT ARTICLES & RECENT TRANSMISSIONS -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Column: Recent Blogs Table (8 cols) -->
+        <div class="lg:col-span-8 bg-white dark:bg-brutal-cardDark p-6 brutal-box space-y-5">
+            <div class="flex items-center justify-between border-b-2 border-brutal-black dark:border-gray-700 pb-3">
+                <div class="flex items-center gap-2 font-mono text-xs font-black uppercase text-neon-yellow">
+                    <span class="w-2.5 h-2.5 bg-neon-yellow border border-brutal-black inline-block"></span>
+                    <span>RECENT PUBLICATIONS</span>
+                </div>
+                <a href="{% url 'dashboard_blogs' %}" class="font-mono text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-neon-cyan">
+                    VIEW ALL ({{ total_blogs }}) &rarr;
+                </a>
+            </div>
+
+            {% if recent_blogs %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left font-mono text-xs border-collapse">
+                    <thead>
+                        <tr class="border-b-2 border-brutal-black dark:border-gray-700 text-gray-500 uppercase">
+                            <th class="py-2.5 pr-4">Title</th>
+                            <th class="py-2.5 px-3">Category</th>
+                            <th class="py-2.5 px-3">Status</th>
+                            <th class="py-2.5 px-3 text-right">Reads</th>
+                            <th class="py-2.5 pl-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
+                        {% for b in recent_blogs %}
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                            <td class="py-3 pr-4 font-sans font-bold text-sm text-brutal-black dark:text-white max-w-xs truncate">
+                                <a href="{% url 'dashboard_blog_edit' b.id %}" class="hover:text-neon-pink">
+                                    {{ b.title }}
+                                </a>
+                            </td>
+                            <td class="py-3 px-3">
+                                <span class="px-2 py-0.5 text-[10px] font-black border border-brutal-black uppercase bg-gray-100 dark:bg-gray-800">
+                                    {{ b.category }}
+                                </span>
+                            </td>
+                            <td class="py-3 px-3">
+                                <a href="{% url 'dashboard_blog_toggle' b.id %}" class="inline-block px-2 py-0.5 text-[10px] font-black border border-brutal-black uppercase {% if b.is_published %}bg-neon-green text-brutal-black{% else %}bg-yellow-400 text-brutal-black{% endif %}" title="Click to toggle status">
+                                    {% if b.is_published %}LIVE{% else %}DRAFT{% endif %}
+                                </a>
+                            </td>
+                            <td class="py-3 px-3 text-right font-bold text-neon-green">
+                                {{ b.views }}
+                            </td>
+                            <td class="py-3 pl-4 text-right space-x-1 whitespace-nowrap">
+                                <a href="{% url 'dashboard_blog_edit' b.id %}" class="px-2 py-1 bg-white dark:bg-gray-800 border border-brutal-black text-xs font-bold hover:bg-neon-yellow hover:text-brutal-black">
+                                    EDIT
+                                </a>
+                                {% if b.is_published %}
+                                <a href="{% url 'blog_detail' b.slug %}" target="_blank" class="px-2 py-1 bg-neon-cyan text-brutal-black border border-brutal-black text-xs font-bold">
+                                    VIEW
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="py-12 text-center font-mono text-xs text-gray-500">
+                No articles composed yet. Click "+ COMPOSE ARTICLE" to publish your first deep dive!
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column: Recent Messages Feed (4 cols) -->
+        <div class="lg:col-span-4 bg-white dark:bg-brutal-cardDark p-6 brutal-box space-y-5">
+            <div class="flex items-center justify-between border-b-2 border-brutal-black dark:border-gray-700 pb-3">
+                <div class="flex items-center gap-2 font-mono text-xs font-black uppercase text-neon-pink">
+                    <span class="w-2.5 h-2.5 bg-neon-pink border border-brutal-black inline-block"></span>
+                    <span>RECENT INBOX LEADS</span>
+                </div>
+                <a href="{% url 'dashboard_messages' %}" class="font-mono text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-neon-cyan">
+                    ALL ({{ total_messages }}) &rarr;
+                </a>
+            </div>
+
+            {% if recent_messages %}
+            <div class="space-y-3.5">
+                {% for msg in recent_messages %}
+                <div class="p-3 border-2 border-brutal-black bg-gray-50 dark:bg-gray-800/80 space-y-2 {% if not msg.is_read %}border-neon-pink{% endif %}">
+                    <div class="flex items-center justify-between text-[11px] font-mono">
+                        <span class="font-black text-brutal-black dark:text-white truncate max-w-[150px]">{{ msg.name }}</span>
+                        <span class="text-gray-500 text-[10px]">{{ msg.created_at|date:"M d, H:i" }}</span>
+                    </div>
+
+                    <div class="font-sans font-bold text-xs text-gray-800 dark:text-gray-200 truncate">
+                        {{ msg.subject }}
+                    </div>
+
+                    <p class="font-sans text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                        {{ msg.message }}
+                    </p>
+
+                    <div class="pt-2 border-t border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-between text-xs font-mono">
+                        <a href="mailto:{{ msg.email }}?subject=Re:%20{{ msg.subject|urlencode }}" class="px-2 py-0.5 bg-neon-yellow text-brutal-black font-bold border border-brutal-black hover:bg-neon-cyan transition-colors">
+                            REPLY
+                        </a>
+                        <a href="{% url 'dashboard_message_toggle' msg.id %}" class="text-[10px] font-bold text-gray-500 hover:underline">
+                            {% if msg.is_read %}MARK UNREAD{% else %}&check; MARK READ{% endif %}
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="py-12 text-center font-mono text-xs text-gray-500">
+                Inbox is clear. No transmissions received yet.
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | SATHYA.DEV ADMIN{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <!-- Google Fonts for Neo-Brutalist Theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Neo-Brutalist Admin Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/admin_neo_brutalist.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="site-name" style="display: flex; align-items: center; gap: 12px;">
+    <a href="{% url 'admin:index' %}" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+        <span style="background: #121212; color: #E2FF3B; padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 14px; border: 2px solid #E2FF3B; letter-spacing: 1px;">
+            &gt;_SATHYA.DEV
+        </span>
+        <span style="color: #ffffff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; text-transform: uppercase;">
+            // DJANGO CONTROL PANEL
+        </span>
+    </a>
+</div>
+{% endblock %}
+
+{% block nav-global %}
+<div style="display: flex; align-items: center; gap: 10px; margin-left: 20px; font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+    <a href="{% url 'dashboard_index' %}" style="background: #E2FF3B; color: #121212; padding: 5px 12px; border: 2px solid #121212; text-decoration: none; font-weight: 800; box-shadow: 2px 2px 0px #121212;">
+        &larr; CUSTOM DASHBOARD
+    </a>
+    <a href="{% url 'index' %}" target="_blank" style="background: #00E5FF; color: #121212; padding: 5px 12px; border: 2px solid #121212; text-decoration: none; font-weight: 800; box-shadow: 2px 2px 0px #121212;">
+        LIVE SITE &nearr;
+    </a>
+</div>
+{% endblock %}

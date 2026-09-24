@@ -1,0 +1,275 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}{{ action_title }} // ADMIN CONSOLE{% endblock %}
+
+{% block extra_head %}
+<!-- TinyMCE Rich Text Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
+<style>
+    .tox-tinymce {
+        border: 2px solid #121212 !important;
+        border-radius: 0px !important;
+        box-shadow: 3px 3px 0px 0px #121212 !important;
+    }
+    .dark .tox-tinymce {
+        border: 2px solid #F5F2EB !important;
+        box-shadow: 3px 3px 0px 0px #00E5FF !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data" class="space-y-6">
+    {% csrf_token %}
+
+    <!-- TOP HEADER BAR -->
+    <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <div class="flex items-center gap-2 font-mono text-xs font-black text-neon-pink">
+                <a href="{% url 'dashboard_blogs' %}" class="hover:underline">&larr; BACK TO BLOGS</a>
+                <span>//</span>
+                <span>{% if is_edit %}UPDATE MODE{% else %}NEW COMPOSITION{% endif %}</span>
+            </div>
+            <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-brutal-black dark:text-white tracking-tight mt-1">
+                {{ action_title }}
+            </h1>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <a href="{% url 'dashboard_blogs' %}" class="px-4 py-2.5 bg-gray-100 dark:bg-gray-800 text-brutal-black dark:text-white font-mono font-bold text-xs border-2 border-brutal-black brutal-btn">
+                CANCEL
+            </a>
+            <button type="submit" class="px-6 py-2.5 bg-neon-green text-brutal-black font-mono font-black text-xs uppercase border-2 border-brutal-black brutal-btn flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <span>SAVE TRANSMISSION</span>
+            </button>
+        </div>
+    </div>
+
+    {% if form.errors %}
+    <div class="p-4 bg-red-500 text-white font-mono text-xs font-bold brutal-box-sm">
+        <p class="font-black mb-2">[!] PLEASE FIX THE FOLLOWING ERRORS:</p>
+        <ul class="list-disc pl-5 space-y-1">
+            {% for field, errors in form.errors.items %}
+            <li><strong>{{ field|title }}:</strong> {{ errors|join:", " }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- 2-COLUMN FORM GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- LEFT COLUMN: Primary Content (8 cols) -->
+        <div class="lg:col-span-8 space-y-6">
+
+            <!-- Title & Slug Card -->
+            <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box space-y-4">
+                <div>
+                    <label for="id_title" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300 mb-1.5">
+                        ARTICLE TITLE *
+                    </label>
+                    {{ form.title }}
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label for="id_slug" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300">
+                            URL SLUG (AUTO-GENERATED IF LEFT BLANK)
+                        </label>
+                        <button type="button" onclick="generateSlugFromTitle()" class="text-[10px] font-mono font-bold text-neon-pink hover:underline">
+                            GENERATE FROM TITLE &uarr;
+                        </button>
+                    </div>
+                    {{ form.slug }}
+                </div>
+            </div>
+
+            <!-- Description / Lead Summary -->
+            <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box space-y-2">
+                <label for="id_description" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300">
+                    SHORT SUMMARY / LEAD PARAGRAPH *
+                </label>
+                <p class="font-sans text-xs text-gray-500">Displayed in article preview cards, social share embeds, and as lead summary.</p>
+                {{ form.description }}
+            </div>
+
+            <!-- Full Article Content (TinyMCE) -->
+            <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box space-y-2">
+                <div class="flex items-center justify-between">
+                    <label for="id_content" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300">
+                        ARTICLE BODY CONTENT *
+                    </label>
+                    <span class="font-mono text-[10px] text-gray-500">HTML & RICH FORMATTING ENABLED</span>
+                </div>
+                {{ form.content }}
+            </div>
+
+            <!-- Sources & References -->
+            <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box space-y-2">
+                <label for="id_sources" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300">
+                    SOURCES, REPOSITORIES & CITATIONS (OPTIONAL)
+                </label>
+                <p class="font-sans text-xs text-gray-500">Enter links or references (one per line). These will render in the "Verified Sources" box.</p>
+                {{ form.sources }}
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: Publishing & Metadata Sidebar (4 cols) -->
+        <div class="lg:col-span-4 space-y-6">
+
+            <!-- Publishing Status Card -->
+            <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box space-y-4">
+                <span class="font-mono text-xs font-black uppercase text-neon-yellow block border-b-2 border-brutal-black dark:border-gray-700 pb-2">
+                    // PUBLISHING STATUS
+                </span>
+
+                <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 border-2 border-brutal-black">
+                    {{ form.is_published }}
+                    <label for="id_is_published" class="font-mono text-xs font-bold text-brutal-black dark:text-white cursor-pointer select-none">
+                        MAKE TRANSMISSION LIVE (PUBLIC)
+                    </label>
+                </div>
+
+                {% if is_edit %}
+                <div class="space-y-1 font-mono text-xs text-gray-500 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between">
+                        <span>VIEWS:</span>
+                        <span class="font-bold text-neon-green">{{ blog.views }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>CREATED:</span>
+                        <span>{{ blog.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>UPDATED:</span>
+                        <span>{{ blog.updated_at|date:"M d, Y H:i" }}</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                <button type="submit" class="w-full py-3 bg-neon-green text-brutal-black font-mono font-black text-xs uppercase border-2 border-brutal-black brutal-btn flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    <span>SAVE & PUBLISH</span>
+                </button>
+            </div>
+
+            <!-- Category & Metadata Card -->
+            <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box space-y-4">
+                <span class="font-mono text-xs font-black uppercase text-neon-cyan block border-b-2 border-brutal-black dark:border-gray-700 pb-2">
+                    // METADATA & TAXONOMY
+                </span>
+
+                <div>
+                    <label for="id_category" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300 mb-1">
+                        CATEGORY / DOMAIN *
+                    </label>
+                    {{ form.category }}
+                </div>
+
+                <div>
+                    <label for="id_tags" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300 mb-1">
+                        TAGS (COMMA SEPARATED)
+                    </label>
+                    {{ form.tags }}
+                </div>
+
+                <div>
+                    <label for="id_read_time" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300 mb-1">
+                        READ TIME ESTIMATE
+                    </label>
+                    {{ form.read_time }}
+                </div>
+
+                <div>
+                    <label for="id_author" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300 mb-1">
+                        AUTHOR ATTRIBUTION
+                    </label>
+                    {{ form.author }}
+                </div>
+            </div>
+
+            <!-- Cover Media Card -->
+            <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box space-y-4">
+                <span class="font-mono text-xs font-black uppercase text-neon-pink block border-b-2 border-brutal-black dark:border-gray-700 pb-2">
+                    // COVER MEDIA
+                </span>
+
+                {% if is_edit and blog.image %}
+                <div class="border-2 border-brutal-black overflow-hidden mb-2">
+                    <img src="{{ blog.image.url }}" alt="Cover preview" class="w-full h-32 object-cover">
+                </div>
+                {% endif %}
+
+                <div>
+                    <label for="id_image" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300 mb-1">
+                        UPLOAD IMAGE FILE
+                    </label>
+                    {{ form.image }}
+                </div>
+
+                <div>
+                    <label for="id_image_url" class="block font-mono text-xs font-black uppercase text-gray-700 dark:text-gray-300 mb-1">
+                        OR IMAGE URL (FALLBACK)
+                    </label>
+                    {{ form.image_url }}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // TinyMCE Initialization
+    tinymce.init({
+        selector: '.tinymce-target',
+        height: 520,
+        menubar: 'file edit view insert format tools table help',
+        plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'help', 'wordcount', 'codesample'
+        ],
+        toolbar: 'undo redo | blocks | ' +
+            'bold italic forecolor backcolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'codesample code link image table | removeformat | fullscreen help',
+        content_style: 'body { font-family: Plus Jakarta Sans, sans-serif; font-size: 15px; line-height: 1.7; color: #121212; background: #ffffff; } pre code { font-family: JetBrains Mono, monospace; } h2, h3 { font-family: Space Grotesk, sans-serif; font-weight: 800; }',
+        codesample_languages: [
+            { text: 'Java', value: 'java' },
+            { text: 'JavaScript', value: 'javascript' },
+            { text: 'TypeScript', value: 'typescript' },
+            { text: 'Python', value: 'python' },
+            { text: 'HTML/XML', value: 'markup' },
+            { text: 'CSS', value: 'css' },
+            { text: 'SQL', value: 'sql' },
+            { text: 'Bash', value: 'bash' },
+            { text: 'JSON', value: 'json' },
+            { text: 'Docker', value: 'docker' },
+            { text: 'YAML', value: 'yaml' },
+        ],
+        skin: 'oxide',
+        branding: false,
+    });
+
+    // Auto-generate Slug function
+    function generateSlugFromTitle() {
+        const titleInput = document.getElementById('id_title');
+        const slugInput = document.getElementById('id_slug');
+        if (!titleInput || !slugInput) return;
+        
+        let slug = titleInput.value.toLowerCase().trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        
+        slugInput.value = slug;
+    }
+</script>
+{% endblock %}

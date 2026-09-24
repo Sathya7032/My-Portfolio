@@ -1,0 +1,141 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}TRANSMISSION INBOX // ADMIN CONSOLE{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- HEADER BAR -->
+    <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <div class="flex items-center gap-2 font-mono text-xs font-black text-neon-pink">
+                <span>// VISITOR COMMUNICATIONS</span>
+            </div>
+            <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-brutal-black dark:text-white tracking-tight">
+                TRANSMISSION INBOX
+            </h1>
+            <p class="font-sans text-xs text-gray-600 dark:text-gray-400 mt-1">
+                Direct messages submitted via the portfolio contact terminal.
+            </p>
+        </div>
+
+        <div class="flex items-center gap-3 font-mono text-xs">
+            <span class="px-3 py-1.5 bg-neon-pink text-white font-black border-2 border-brutal-black">
+                {{ unread_count }} UNREAD TRANSMISSIONS
+            </span>
+        </div>
+    </div>
+
+    <!-- FILTER & SEARCH BAR -->
+    <div class="bg-white dark:bg-brutal-cardDark p-4 brutal-box flex flex-col md:flex-row items-center justify-between gap-4">
+        <!-- Status filter buttons -->
+        <div class="flex items-center gap-2 w-full md:w-auto font-mono text-xs font-bold">
+            <a href="{% url 'dashboard_messages' %}" class="px-3 py-1.5 border-2 border-brutal-black transition-colors {% if current_status == 'all' %}bg-neon-yellow text-brutal-black font-black{% else %}bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                ALL ({{ total_count }})
+            </a>
+            <a href="{% url 'dashboard_messages' %}?status=unread" class="px-3 py-1.5 border-2 border-brutal-black transition-colors {% if current_status == 'unread' %}bg-neon-pink text-white font-black{% else %}bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                UNREAD ({{ unread_count }})
+            </a>
+            <a href="{% url 'dashboard_messages' %}?status=read" class="px-3 py-1.5 border-2 border-brutal-black transition-colors {% if current_status == 'read' %}bg-neon-green text-brutal-black font-black{% else %}bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                READ ({{ read_count }})
+            </a>
+        </div>
+
+        <!-- Search Form -->
+        <form method="GET" action="{% url 'dashboard_messages' %}" class="flex items-center gap-2 w-full md:w-auto">
+            {% if current_status != 'all' %}
+            <input type="hidden" name="status" value="{{ current_status }}">
+            {% endif %}
+            <div class="relative w-full md:w-72">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search sender, email, subject..." class="w-full px-3 py-1.5 font-mono text-xs border-2 border-brutal-black bg-gray-50 dark:bg-gray-900 text-brutal-black dark:text-white focus:outline-none focus:ring-2 focus:ring-neon-cyan">
+            </div>
+            <button type="submit" class="px-3 py-1.5 bg-neon-cyan text-brutal-black font-mono font-bold text-xs border-2 border-brutal-black brutal-btn shrink-0">
+                SEARCH
+            </button>
+            {% if query %}
+            <a href="{% url 'dashboard_messages' %}" class="px-2 py-1.5 bg-gray-200 dark:bg-gray-700 font-mono text-xs border border-brutal-black">
+                CLEAR
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- MESSAGES FEED -->
+    {% if contact_messages %}
+    <div class="space-y-4">
+        {% for msg in contact_messages %}
+        <div class="bg-white dark:bg-brutal-cardDark p-6 brutal-box space-y-4 transition-all {% if not msg.is_read %}border-l-8 border-l-neon-pink{% endif %}">
+            
+            <!-- Message Header Row -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-brutal-black dark:border-gray-700 pb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-neon-yellow border-2 border-brutal-black flex items-center justify-center font-display font-black text-base text-brutal-black shrink-0">
+                        {{ msg.name|slice:":2"|upper }}
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-display font-extrabold text-base text-brutal-black dark:text-white">
+                                {{ msg.name }}
+                            </span>
+                            <a href="mailto:{{ msg.email }}" class="font-mono text-xs font-bold text-gray-500 hover:text-neon-cyan hover:underline">
+                                &lt;{{ msg.email }}&gt;
+                            </a>
+                        </div>
+                        <div class="font-mono text-xs text-gray-400">
+                            {{ msg.created_at|date:"l, F d, Y // H:i" }} UTC
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono text-xs">
+                    <span class="px-2.5 py-1 font-black border border-brutal-black uppercase {% if not msg.is_read %}bg-neon-pink text-white animate-pulse{% else %}bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300{% endif %}">
+                        {% if not msg.is_read %}NEW TRANSMISSION{% else %}READ{% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Subject -->
+            <div class="font-sans font-bold text-base text-brutal-black dark:text-white flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-gray-400 uppercase">// SUBJECT:</span>
+                <span>{{ msg.subject }}</span>
+            </div>
+
+            <!-- Transmission Content Body -->
+            <div class="p-4 bg-gray-50 dark:bg-gray-800/60 border-2 border-brutal-black font-sans text-sm text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">
+                {{ msg.message }}
+            </div>
+
+            <!-- Actions Row -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+                <div class="flex items-center gap-2 font-mono text-xs">
+                    <a href="mailto:{{ msg.email }}?subject=Re:%20{{ msg.subject|urlencode }}" class="px-4 py-2 bg-neon-cyan text-brutal-black font-black border-2 border-brutal-black brutal-btn flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                        <span>REPLY VIA EMAIL</span>
+                    </a>
+
+                    <a href="{% url 'dashboard_message_toggle' msg.id %}" class="px-3 py-2 bg-white dark:bg-gray-800 text-brutal-black dark:text-white font-bold border-2 border-brutal-black brutal-btn hover:bg-neon-yellow hover:text-brutal-black transition-colors">
+                        {% if msg.is_read %}MARK UNREAD{% else %}&check; MARK READ{% endif %}
+                    </a>
+                </div>
+
+                <a href="{% url 'dashboard_message_delete' msg.id %}" onclick="return confirm('Delete transmission from {{ msg.name|escapejs }}?');" class="px-3 py-2 bg-red-500 text-white font-mono text-xs font-bold border-2 border-brutal-black brutal-btn hover:bg-red-600 transition-colors">
+                    DELETE
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="bg-white dark:bg-brutal-cardDark p-16 brutal-box text-center space-y-3 font-mono">
+        <div class="text-4xl text-gray-400">&empty;</div>
+        <p class="text-base font-bold text-brutal-black dark:text-white">NO TRANSMISSIONS IN THIS VIEW</p>
+        <p class="text-xs text-gray-500">Your communications stream is clear.</p>
+        <a href="{% url 'dashboard_messages' %}" class="inline-block mt-3 px-4 py-2 bg-neon-yellow text-brutal-black font-black text-xs border-2 border-brutal-black brutal-btn">
+            VIEW ALL MESSAGES
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

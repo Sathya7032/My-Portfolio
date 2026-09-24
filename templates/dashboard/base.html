@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ADMIN CONSOLE{% endblock %} // SATHYA.DEV</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brutal: {
+                            black: '#121212',
+                            white: '#FFFFFF',
+                            bg: '#F5F2EB',
+                            bgDark: '#0C0E12',
+                            cardDark: '#141821',
+                            borderDark: '#2D3748',
+                        },
+                        neon: {
+                            yellow: '#E2FF3B',
+                            green: '#00F59B',
+                            cyan: '#00E5FF',
+                            pink: '#FF2A85',
+                            purple: '#9D4EDD',
+                            orange: '#FF6B00',
+                        }
+                    },
+                    boxShadow: {
+                        'brutal': '4px 4px 0px 0px #121212',
+                        'brutal-lg': '8px 8px 0px 0px #121212',
+                        'brutal-sm': '2px 2px 0px 0px #121212',
+                        'brutal-dark': '4px 4px 0px 0px #E2FF3B',
+                        'brutal-dark-cyan': '4px 4px 0px 0px #00E5FF',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F5F2EB;
+            color: #121212;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-image: radial-gradient(#121212 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .dark body {
+            background-color: #0C0E12;
+            color: #F5F2EB;
+            background-image: radial-gradient(#2D3748 1px, transparent 1px);
+        }
+
+        .brutal-box {
+            border: 3px solid #121212;
+            box-shadow: 5px 5px 0px 0px #121212;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .dark .brutal-box {
+            border: 3px solid #F5F2EB;
+            box-shadow: 5px 5px 0px 0px #E2FF3B;
+        }
+
+        .brutal-box-sm {
+            border: 2px solid #121212;
+            box-shadow: 3px 3px 0px 0px #121212;
+        }
+
+        .dark .brutal-box-sm {
+            border: 2px solid #F5F2EB;
+            box-shadow: 3px 3px 0px 0px #00E5FF;
+        }
+
+        .brutal-btn {
+            border: 3px solid #121212;
+            box-shadow: 4px 4px 0px 0px #121212;
+            font-weight: 700;
+            transition: all 0.1s ease-in-out;
+            cursor: pointer;
+        }
+
+        .brutal-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #121212;
+        }
+
+        .brutal-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px 0px #121212;
+        }
+
+        .dark .brutal-btn {
+            border: 3px solid #F5F2EB;
+            box-shadow: 4px 4px 0px 0px #00E5FF;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="min-h-screen flex flex-col selection:bg-neon-yellow selection:text-brutal-black">
+
+    <!-- HEADER & NAVBAR -->
+    <header class="sticky top-0 z-40 bg-white dark:bg-brutal-cardDark border-b-[3px] border-brutal-black dark:border-neon-yellow transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between gap-4">
+            
+            <!-- Left Branding -->
+            <div class="flex items-center gap-4">
+                <a href="{% url 'dashboard_index' %}" class="flex items-center gap-2 group">
+                    <div class="bg-brutal-black text-neon-yellow dark:bg-neon-yellow dark:text-brutal-black px-3 py-1 font-mono font-extrabold text-base tracking-wider border-2 border-brutal-black group-hover:rotate-1 transition-transform">
+                        &gt;_SATHYA.DEV
+                    </div>
+                </a>
+                <span class="font-mono text-xs font-black px-2 py-0.5 bg-neon-pink text-white uppercase hidden sm:inline-block border border-brutal-black">
+                    ADMIN
+                </span>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center gap-2 ml-4 font-mono text-xs font-bold">
+                    <a href="{% url 'dashboard_index' %}" class="px-3 py-1.5 border-2 border-brutal-black hover:bg-neon-cyan hover:text-brutal-black transition-colors {% if request.resolver_match.url_name == 'dashboard_index' %}bg-neon-yellow text-brutal-black shadow-brutal-sm font-black{% else %}bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                        OVERVIEW
+                    </a>
+                    <a href="{% url 'dashboard_blogs' %}" class="px-3 py-1.5 border-2 border-brutal-black hover:bg-neon-cyan hover:text-brutal-black transition-colors {% if 'blog' in request.resolver_match.url_name %}bg-neon-yellow text-brutal-black shadow-brutal-sm font-black{% else %}bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                        BLOGS
+                    </a>
+                    <a href="{% url 'dashboard_messages' %}" class="px-3 py-1.5 border-2 border-brutal-black hover:bg-neon-cyan hover:text-brutal-black transition-colors {% if 'message' in request.resolver_match.url_name %}bg-neon-yellow text-brutal-black shadow-brutal-sm font-black{% else %}bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                        INBOX
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Right Controls -->
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <a href="{% url 'dashboard_blog_create' %}" class="hidden sm:flex px-3 py-1.5 bg-neon-green text-brutal-black font-mono text-xs font-extrabold border-2 border-brutal-black brutal-btn items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    <span>COMPOSE</span>
+                </a>
+
+                <a href="{% url 'index' %}" target="_blank" class="px-2.5 py-1.5 bg-white dark:bg-gray-800 text-brutal-black dark:text-white font-mono text-xs font-bold border-2 border-brutal-black brutal-btn flex items-center gap-1" title="View Public Portfolio">
+                    <span>SITE</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </a>
+
+                <a href="/admin/" target="_blank" class="px-2.5 py-1.5 bg-gray-100 dark:bg-gray-800 text-brutal-black dark:text-gray-200 font-mono text-xs font-bold border-2 border-brutal-black brutal-btn hidden sm:flex items-center gap-1" title="Open Django Built-in Admin">
+                    <span>DJANGO ADMIN</span>
+                </a>
+
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" aria-label="Toggle Dark Mode" class="brutal-btn p-2 bg-neon-cyan dark:bg-neon-yellow text-brutal-black flex items-center justify-center">
+                    <span id="theme-icon" class="text-base flex items-center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    </span>
+                </button>
+
+                <!-- Logout -->
+                <a href="{% url 'dashboard_logout' %}" class="p-2 bg-red-500 text-white font-mono text-xs font-black border-2 border-brutal-black brutal-btn flex items-center justify-center" title="Logout">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Mobile sub-navigation bar -->
+        <div class="flex md:hidden border-t-2 border-brutal-black dark:border-gray-700 bg-gray-50 dark:bg-gray-900 px-4 py-2 gap-2 font-mono text-xs font-bold overflow-x-auto">
+            <a href="{% url 'dashboard_index' %}" class="px-2.5 py-1 border border-brutal-black whitespace-nowrap {% if request.resolver_match.url_name == 'dashboard_index' %}bg-neon-yellow text-brutal-black{% else %}bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                OVERVIEW
+            </a>
+            <a href="{% url 'dashboard_blogs' %}" class="px-2.5 py-1 border border-brutal-black whitespace-nowrap {% if 'blog' in request.resolver_match.url_name %}bg-neon-yellow text-brutal-black{% else %}bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                BLOGS
+            </a>
+            <a href="{% url 'dashboard_messages' %}" class="px-2.5 py-1 border border-brutal-black whitespace-nowrap {% if 'message' in request.resolver_match.url_name %}bg-neon-yellow text-brutal-black{% else %}bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300{% endif %}">
+                INBOX
+            </a>
+            <a href="{% url 'dashboard_blog_create' %}" class="px-2.5 py-1 bg-neon-green text-brutal-black border border-brutal-black whitespace-nowrap">
+                + COMPOSE
+            </a>
+        </div>
+    </header>
+
+    <!-- FLASH MESSAGES -->
+    {% if messages %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        {% for message in messages %}
+        <div class="p-3 mb-2 font-mono text-xs font-bold brutal-box-sm flex items-center justify-between gap-3 {% if message.tags == 'success' %}bg-neon-green text-brutal-black{% elif message.tags == 'error' %}bg-red-500 text-white{% else %}bg-neon-cyan text-brutal-black{% endif %}">
+            <div class="flex items-center gap-2">
+                <span class="font-black">[STATUS]</span>
+                <span>{{ message }}</span>
+            </div>
+            <button onclick="this.parentElement.remove()" class="font-mono font-black text-sm px-1.5 hover:opacity-70">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t-[3px] border-brutal-black dark:border-neon-yellow bg-white dark:bg-brutal-cardDark transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-xs font-bold text-gray-600 dark:text-gray-400">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 bg-neon-green inline-block"></span>
+                <span>SATHYA.DEV PORTFOLIO // ADMIN SYSTEM ACTIVE</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="{% url 'index' %}" class="hover:text-neon-pink">LIVE SITE</a>
+                <span>&bull;</span>
+                <a href="{% url 'blog_list' %}" class="hover:text-neon-cyan">PUBLIC BLOGS</a>
+                <span>&bull;</span>
+                <a href="/admin/" class="hover:text-neon-yellow">DJANGO BACKSTAGE</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- THEME SCRIPT -->
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const htmlElement = document.documentElement;
+
+        const sunSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`;
+        const moonSvg = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
+
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+            themeIcon.innerHTML = sunSvg;
+        } else {
+            htmlElement.classList.remove('dark');
+            themeIcon.innerHTML = moonSvg;
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                themeIcon.innerHTML = moonSvg;
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.innerHTML = sunSvg;
+            }
+        });
+    </script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+
+</html>
